@@ -1,0 +1,19 @@
+variables:
+  DEP_IMAGE: $CI_REGISTRY_IMAGE/dependencies:$CI_COMMIT_SHA
+  RELEASE_DEP_IMAGE: $CI_REGISTRY_IMAGE/dependencies:latest
+
+build:
+  image: docker:stable
+  services:
+      - docker:stable-dind
+  script:
+    - echo building $DEP_IMAGE and releasing as $RELEASE_DEP_IMAGE
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $RELEASE_DEP_IMAGE || true
+    - docker build -t $DEP_IMAGE --cache-from $RELEASE_DEP_IMAGE .
+    - docker push $DEP_IMAGE
+    # tag it as latest and push it too
+    - docker tag $DEP_IMAGE $RELEASE_DEP_IMAGE
+    - docker push $RELEASE_DEP_IMAGE
+  only:
+    - master
