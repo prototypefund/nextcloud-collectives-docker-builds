@@ -12,4 +12,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
 RUN docker-php-ext-install \
     mbstring pdo_pgsql curl json intl gd xml zip bz2 opcache
 RUN pecl install xdebug && docker-php-ext-enable xdebug
-RUN curl -sS https://getcomposer.org/installer | php
+RUN mkdir -p /srv/nextcloud; \
+    cd /srv/nextcloud; \
+    git clone https://github.com/nextcloud/server.git; \
+    cd server; \
+    git submodule update --init; \
+    ./occ maintenance:install --admin-pass 'admin-pass'
