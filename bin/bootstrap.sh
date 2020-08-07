@@ -27,10 +27,6 @@ NC_TRUSTED_DOMAIN_IDX=1
 for domain in $NEXTCLOUD_TRUSTED_DOMAINS; do
     ./occ config:system:set trusted_domains "$NC_TRUSTED_DOMAIN_IDX" --value="$domain"
     NC_TRUSTED_DOMAIN_IDX="$(($NC_TRUSTED_DOMAIN_IDX+1))"
-    # Add domain to /etc/hotss
-    if [ "$domain" != "localhost" ]; then
-        echo "$INTERNAL_IP_ADDRESS $domain" >>/etc/hosts
-    fi
 done
 # Allow requests from local remote servers
 ./occ config:system:set --type bool --value true -- allow_local_remote_servers
