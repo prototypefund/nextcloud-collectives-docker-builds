@@ -1,4 +1,4 @@
-FROM php:7.3
+FROM php:7.3-apache
 
 RUN DEBIAN_FRONTEND=noninteractive apt update
 RUN DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends \
