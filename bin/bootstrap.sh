@@ -11,9 +11,10 @@ configure_add_user() {
 
 mkdir -p /srv/nextcloud
 cd /srv/nextcloud
-git clone https://github.com/nextcloud/server.git
+git clone --branch stable19 --depth 1 --shallow-submodules \
+    https://github.com/nextcloud/server.git
 cd server
-git submodule update --init
+git submodule update --init --depth 1
 ./occ maintenance:install --admin-user=admin --admin-pass=admin
 for app in $NEXTCLOUD_APPS; do
     ./occ app:enable $app
