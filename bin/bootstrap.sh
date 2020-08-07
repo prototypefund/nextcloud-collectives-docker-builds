@@ -24,7 +24,7 @@ for user in $NEXTCLOUD_USERS; do
 done
 INTERNAL_IP_ADDRESS="$(ip a show type veth | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")"
 NC_TRUSTED_DOMAIN_IDX=1
-for domain in NEXTCLOUD_TRUSTED_DOMAINS; do
+for domain in $NEXTCLOUD_TRUSTED_DOMAINS; do
     ./occ config:system:set trusted_domains "$NC_TRUSTED_DOMAIN_IDX" --value="$domain"
     NC_TRUSTED_DOMAIN_IDX="$(($NC_TRUSTED_DOMAIN_IDX+1))"
     # Add domain to /etc/hotss
