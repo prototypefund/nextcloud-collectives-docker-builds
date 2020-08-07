@@ -15,5 +15,3 @@ build:
     # tag it as latest and push it too
     - docker tag $DEP_IMAGE $RELEASE_DEP_IMAGE
     - docker push $RELEASE_DEP_IMAGE
-  only:
-    - master

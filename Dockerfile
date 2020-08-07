@@ -1,20 +1,46 @@
 FROM php:7.3
-RUN DEBIAN_FRONTEND=noninteractive apt update && \
-    apt install -yq --no-install-recommends \
-        git libpq-dev libcurl4-gnutls-dev libicu-dev libvpx-dev \
-        libjpeg-dev libpng-dev libxpm-dev zlib1g-dev libfreetype6-dev \
-        libxml2-dev libexpat1-dev libbz2-dev libgmp3-dev libldap2-dev \
-        unixodbc-dev libsqlite3-dev libaspell-dev libsnmp-dev \
-        libpcre3-dev libtidy-dev libzip-dev && \
-    apt -yq autoremove && \
+
+RUN DEBIAN_FRONTEND=noninteractive apt update
+RUN DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends \
+        git \
+        iproute2 \
+        libcurl4-gnutls-dev \
+        libicu-dev \
+        libjpeg-dev \
+        libmcrypt-dev \
+        libpcre3-dev \
+        libpng-dev \
+        libpq-dev \
+        libxml2-dev \
+        libzip-dev && \
+    apt -y autoremove && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
+
 RUN docker-php-ext-install \
-    mbstring pdo_pgsql curl json intl gd xml zip bz2 opcache
-RUN pecl install xdebug && docker-php-ext-enable xdebug
-RUN mkdir -p /srv/nextcloud; \
-    cd /srv/nextcloud; \
-    git clone https://github.com/nextcloud/server.git; \
-    cd server; \
-    git submodule update --init; \
-    ./occ maintenance:install --admin-pass 'admin-pass'
+        gd \
+        intl \
+        opcache \
+        pcntl \
+        pdo_pgsql \
+        zip
+
+RUN pecl install xdebug; \
+    pecl install mcrypt; \
+    docker-php-ext-enable xdebug
+
+
+# configure PHP
+RUN { \
+        echo 'opcache.enable=1'; \
+        echo 'opcache.enable_cli=1'; \
+        echo 'opcache.interned_strings_buffer=8'; \
+        echo 'opcache.max_accelerated_files=10000'; \
+        echo 'opcache.memory_consumption=128'; \
+        echo 'opcache.save_comments=1'; \
+        echo 'opcache.revalidate_freq=1'; \
+    } > /usr/local/etc/php/conf.d/opcache-recommended.ini; \
+    echo 'memory_limit=512M' > /usr/local/etc/php/conf.d/memory-limit.ini
+
+ADD bin/bootstrap.sh /usr/local/bin/
+RUN /usr/local/bin/bootstrap.sh
