@@ -14,13 +14,13 @@ configure_add_user() {
 }
 
 # Prepare webroot
-rmdir /var/www/html
+rmdir $WEBROOT
 chown www-data:www-data /var/www
 
 # Install Nextcloud
 sudo -E -u www-data git clone --branch stable19 --depth 1 --shallow-submodules \
     https://github.com/nextcloud/server.git $WEBROOT
-
+cd $WEBROOT
 sudo -E -u www-data git submodule update --init --depth 1
 OCC maintenance:install --admin-user=admin --admin-pass=admin
 

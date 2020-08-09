@@ -47,9 +47,9 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 RUN a2enmod rewrite
 
 ENV WEBROOT /var/www/html
-WORKDIR /var/www/html
+WORKDIR /var/www
 
 ADD bin/install-nextcloud.sh /usr/local/bin/
 RUN /usr/local/bin/install-nextcloud.sh
 
-ENTRYPOINT ["apache2-foreground"]
+WORKDIR /var/www/html
