@@ -42,5 +42,13 @@ RUN { \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini; \
     echo 'memory_limit=512M' > /usr/local/etc/php/conf.d/memory-limit.ini
 
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+RUN a2enmod rewrite
+
+ENV WEBROOT /var/www/html
+WORKDIR /var/www/html
+
 ADD bin/bootstrap.sh /usr/local/bin/
 RUN /usr/local/bin/bootstrap.sh
+
+ENTRYPOINT ["apache2-foreground"]

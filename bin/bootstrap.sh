@@ -9,11 +9,11 @@ configure_add_user() {
     ./occ user:add --password-from-env "$1"
 }
 
-mkdir -p /srv/nextcloud
-cd /srv/nextcloud
+cd "$WEBROOT/.."
+rmdir "./html"
 git clone --branch stable19 --depth 1 --shallow-submodules \
-    https://github.com/nextcloud/server.git
-cd server
+    https://github.com/nextcloud/server.git html
+cd html
 git submodule update --init --depth 1
 ./occ maintenance:install --admin-user=admin --admin-pass=admin
 for app in $NEXTCLOUD_APPS; do
@@ -29,4 +29,3 @@ for domain in $NEXTCLOUD_TRUSTED_DOMAINS; do
 done
 # Allow requests from local remote servers
 ./occ config:system:set --type bool --value true -- allow_local_remote_servers
-
