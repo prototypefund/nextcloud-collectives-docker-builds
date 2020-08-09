@@ -41,5 +41,9 @@ for domain in $NEXTCLOUD_TRUSTED_DOMAINS; do
     NC_TRUSTED_DOMAIN_IDX="$(($NC_TRUSTED_DOMAIN_IDX+1))"
 done
 
-# Allow requests from local remote servers
+OCC config:system:set --value 'http://nextcloud.local' -- overwrite.cli.url
 OCC config:system:set --type bool --value true -- allow_local_remote_servers
+
+# Configure circles app to accept non-ssl requests
+OCC config:app:set --value 1 -- circles allow_non_ssl_links
+OCC config:app:set --value 1 -- circles local_is_non_ssl
