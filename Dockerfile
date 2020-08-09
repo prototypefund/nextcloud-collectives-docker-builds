@@ -10,7 +10,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends \
         libmcrypt-dev \
         libpcre3-dev \
         libpng-dev \
-        libpq-dev \
         libxml2-dev \
         libzip-dev \
         sudo && \
@@ -23,7 +22,6 @@ RUN docker-php-ext-install \
         intl \
         opcache \
         pcntl \
-        pdo_pgsql \
         zip
 
 RUN pecl install xdebug; \
