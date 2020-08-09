@@ -12,7 +12,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends \
         libpng-dev \
         libpq-dev \
         libxml2-dev \
-        libzip-dev && \
+        libzip-dev \
+        sudo && \
     apt -y autoremove && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
@@ -46,9 +47,9 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 RUN a2enmod rewrite
 
 ENV WEBROOT /var/www/html
+WORKDIR /var/www
+
+ADD bin/install-nextcloud.sh /usr/local/bin/
+RUN /usr/local/bin/install-nextcloud.sh
+
 WORKDIR /var/www/html
-
-ADD bin/bootstrap.sh /usr/local/bin/
-RUN /usr/local/bin/bootstrap.sh
-
-ENTRYPOINT ["apache2-foreground"]
