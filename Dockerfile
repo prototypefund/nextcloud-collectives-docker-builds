@@ -48,7 +48,7 @@ RUN a2enmod rewrite
 ENV WEBROOT /var/www/html
 WORKDIR /var/www/html
 
-ADD bin/bootstrap.sh /usr/local/bin/
-RUN /usr/local/bin/bootstrap.sh
+ADD bin/install-nextcloud.sh /usr/local/bin/
+RUN /usr/local/bin/install-nextcloud.sh
 
 ENTRYPOINT ["apache2-foreground"]
