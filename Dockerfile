@@ -12,7 +12,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends \
         libpng-dev \
         libpq-dev \
         libxml2-dev \
-        libzip-dev && \
+        libzip-dev \
+        sudo && \
     apt -y autoremove && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
