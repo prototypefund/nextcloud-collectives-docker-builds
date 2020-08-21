@@ -51,7 +51,7 @@ RUN rmdir /var/www/html && \
     chown www-data:www-data /var/www
 
 # Install Nextcloud
-RUN sudo -u www-data git clone --branch stable19 --depth 1 --shallow-submodules \
+RUN sudo -u www-data git clone --branch master --depth 1 --shallow-submodules \
         https://github.com/nextcloud/server.git /var/www/html && \
     cd /var/www/html && \
     sudo -u www-data git submodule update --init --depth 1 && \
@@ -61,7 +61,7 @@ RUN sudo -u www-data git clone --branch stable19 --depth 1 --shallow-submodules 
 WORKDIR /var/www/html
 
 # Install and enable Nextcloud apps
-# TODO: remove `-f` once text app is compatible with stable19 again
+# TODO: remove `-f` once all apps are compatible with master again
 RUN for app in circles viewer text; do \
     sudo -u www-data /var/www/html/occ app:enable -f $app; \
     done
